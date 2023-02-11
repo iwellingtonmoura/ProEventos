@@ -7,47 +7,26 @@ namespace ProEventos.API.Controllers;
 [Route("api/[controller]")]
 public class EventoController : ControllerBase
 {
-    public IEnumerable <Evento> _evento = new Evento[]
-        {
-           new Evento() {
-            EventoId = 1,
-            Tema = "Angular e .Net Core 6",
-            Local = "Belo Horizonte",
-            Lote = "1 Lote",
-            QtdPessoas = 250,
-            DataEvento = DateTime.Now.AddDays(2).ToString("ddMMyyyy"),
-            ImagemURL = "Foto.png"
+    
+    private readonly DataContext _context;
 
-        },
-         new Evento() {
-            EventoId = 2,
-            Tema = "Angular e .Net Core 6",
-            Local = "Belo Horizonte",
-            Lote = "2 Lote",
-            QtdPessoas = 250,
-            DataEvento = DateTime.Now.AddDays(2).ToString("ddMMyyyy"),
-            ImagemURL = "Foto.png"
-         }
-
-        };
-
-    public EventoController()
+    public EventoController(DataContext context)
     {
-        
+        _context = context;
     }
 
     
     [HttpGet(Name = "GetWeatherForecast")]
-    public IEnumerable<Evento> Get()
+    public IEnumerable<Evento>? Get()
     {
-        return _evento;
+        return _context.Eventos;
     }
     
 
      [HttpGet("{Id}")]
-    public IEnumerable<Evento> GetById(int Id)
+    public Evento ? GetById(int Id)
     {
-        return _evento.Where(evento => evento.EventoId == Id);
+        return _context.Eventos.FirstOrDefault(evento => evento.EventoId == Id);
     }
 
     [HttpPost(Name = "GetWeatherForecast")]
